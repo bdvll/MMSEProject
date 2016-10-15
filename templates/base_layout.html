@@ -1,1 +1,17 @@
-<p> hello </p>
+<!doctype html>
+<title>SEP</title>
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+<div class="sep_page">
+  <div class="header">
+    <h1>SEP</h1>
+  </div>
+  <div class="metanav">
+  {% if session.logged_in %}
+    <a href="{{ url_for('logout') }}">log out</a>
+  {% endif %}
+  </div>
+  {% for message in get_flashed_messages() %}
+    <div class="flash">{{ message }}</div>
+  {% endfor %}
+  {% block body %}{% endblock %}
+</div>

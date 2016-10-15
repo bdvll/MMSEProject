@@ -1,9 +1,20 @@
-.sep_head{
+h1, h2 { font-family: "Helvetica"; color: #000;}
+h1 {font-size: 60px;  opacity: 0.87; }
+h2 {font-size: 40px;  opacity: 0.54; }
+p {font-size: 20px;  opacity: 0.54; }
 
-}
-.sep_body{
+body {background: #fafafa;}
+.header {width: 75em; height: 10em; border-bottom: 2px solid #ccc; display: flex; text-align: center; align-items: center;}
+.sep_page{ margin: 2em auto; width: 75em; border: 5px solid #ccc; padding: 0.8em; background: #fff; }
+.flash {background: #cfc; padding: 0.5em; border: 1px solid #000;}
+.error {background: #f0d6d6; padding: 0.5em; border: 1px solid #000;}
 
-}
-.sep_list{
-  
-}
+/* LIST */
+.sep_list        { list-style: none; margin: 0; padding: 0; }
+.sep_list li     { margin: 0.8em 1.2em; }
+.sep_list li h2  { margin-left: -1em; }
+
+/* LOGIN */
+.login {text-align: center; font-size: 1.2em;}
+.login h2 {margin-top: 1em;}
+input[type="submit"]#login {text-align: center;}

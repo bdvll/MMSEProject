@@ -1,0 +1,16 @@
+{% extends "base_layout.html" %}
+{% block body %}
+  <div class="login">
+    <h2>Welcome to SEP</h2>
+    {% if error %}<p class=error><strong>Error:</strong> {{ error }}{% endif %}
+    <div class="login_box">
+      <form action="{{ url_for('login') }}" method=post>
+        <dl>
+          <input type="text" id="username" name="username" placeholder="Username" onFocus="this.value=''">
+          <input type="text" id="pass" name="pass" placeholder="Password" onFocus="this.value=''">
+          <input type="submit" id="login" value="Login">
+        </dl>
+      </form>
+    </div>
+  </div>
+{% endblock %}

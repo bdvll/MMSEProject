@@ -4,9 +4,11 @@ from sqlite3 import dbapi2 as sqlite3
 from flask import Flask, request, session, g, redirect, url_for, abort, \
      render_template, flash
 
+### INIT ###
+
 app = Flask(__name__)
 #Dicts mapping roles to user names
-logged_in_users = {}
+USERS = {"admin"}
 
 app.config.update(dict(
     DATABASE=os.path.join(app.root_path, 'sep.db'),
@@ -17,6 +19,7 @@ app.config.update(dict(
 ))
 app.config.from_envvar('SEP_SETTINGS', silent=True)
 
+### DATABASE SET UP ###
 @app.before_first_request
 def init_db():
   db = get_db()
@@ -34,20 +37,34 @@ def connect_db():
   rv.row_factory = sqlite3.Row
   return rv
 
+### ENDPOINTS ###
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+  error = None
+  if request.method == 'POST':
+    username = request.form['username']
+    if username not in USERS or request.form['pass'] != app.config['PASSWORD']:
+      error = "Incorrect login"
+    else:
+      session['logged_in'] = True
+      session['username'] = username
+      flash('Welcome, '+username)
+      return render_template("root.html")
+  return render_template('login.html', error=error)
+
+@app.route('/logout')
+def logout():
+    session.pop('logged_in', None)
+    flash('You were logged out')
+    return redirect(url_for('login'))
 
 @app.route('/')
 def root():
-  return "Succesfully served root of application!"
+  if not session.get('logged_in'):
+    return redirect(url_for('login'))
+  return render_template("root.html")
 
-@app.route('/login')
-def login():
-  """ User story: User login"""
-  pass
 
-@app.route('/login')
-def logout():
-  """ User story: User logout"""
-  pass
 
 ### GET ENDPOINTS ###
 
