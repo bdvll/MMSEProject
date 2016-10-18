@@ -51,10 +51,22 @@ class FlaskrTestCase(unittest.TestCase):
     #print rv.data
     assert 'Report removed!' in rv.data
 
-def test_access_roles():
+  def test_access_roles(self):
     rv = self.login(name='admin', word='default')
     #print rv.data
-    assert 'Welcome,' in rv.data
+    assert 'employees' in rv.data
+    assert 'events' in rv.data
+    assert 'tasks' in rv.data
+    assert 'reports' in rv.data
+    assert 'clients' in rv.data
+
+    rv = self.login(name='josh', word='default')
+    #print rv.data
+    assert not 'employees' in rv.data
+    assert 'events' in rv.data
+    assert not 'tasks' in rv.data
+    assert 'reports' in rv.data
+    assert not 'clients' in rv.data
 
 if __name__ == '__main__':
   unittest.main()
