@@ -1,0 +1,7 @@
+{% extends "base_layout.html" %}
+{% block body %}
+<h2> {{entry.event_name}} </h2>
+<p> Date of event: {{ entry.event_date}}
+<p> Client: {{ entry.client_name }}
+<p> Budget for event: {{ entry.budget }} sek
+{% endblock %}

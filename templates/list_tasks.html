@@ -4,10 +4,16 @@
 {% if session.logged_in %}
     <form action="{{ url_for('create_task') }}" method="post" class="add-entry">
       <dl>
-        <dt>Title:
-        <dd><input type="text" size="30" name="title">
-        <dt>Text:
-        <dd><textarea name="text" rows="5" cols="40"></textarea>
+        <dt>Task name:
+        <dd><input type="text" size="30" name="task_name">
+        <dt>Task due date:
+        <dd><input type="text" size="30" name="task_date">
+        <dt>Client name:
+        <dd><input type="text" size="30" name="client_name">
+        <dt> Budget:
+        <dd><input type="text" size="30" name="budget">
+        <dt> Responsible Sub-team:
+        <dd><input type="text" size="30" name="sub_team">
         <dd><input type="submit" value="Share">
       </dl>
     </form>

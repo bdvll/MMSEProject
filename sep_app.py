@@ -13,6 +13,7 @@ Roles = {"admin": ["employees", "events", "tasks", "reports", "clients"],
 app = Flask(__name__)
 #Dicts mapping roles to user names
 USERS = {"admin": "admin", "josh": "marketing", "mike": "HR", "Hannah": "scs"}
+PASSWORDS = {"admin": "default", "josh": "kitten", "mike": "truck", "Hannah": "g00dp4ssw0rd"}
 
 app.config.update(dict(
     DATABASE=os.path.join(app.root_path, 'sep.db'),
@@ -46,7 +47,7 @@ def login():
   error = None
   if request.method == 'POST':
     username = request.form['username']
-    if username not in USERS or request.form['password'] != app.config['PASSWORD']:
+    if username not in USERS or request.form['password'] != PASSWORDS[username]:
       error = "Incorrect login"
     else:
       session['logged_in'] = True
@@ -131,9 +132,9 @@ def list_events():
 def view_task(name):
   """ USer story: user should be able to view and alter separate tasks """
   db = get_db()
-  cur = db.execute('select client_name, task_date, task_name, budget, sub_team from tasks where name = \''+name+'\'')
-  task = cur.fetcone()
-  return render_template("single_view.html", entry = task)
+  cur = db.execute('select client_name, task_date, task_name, budget, sub_team from tasks where task_name = \''+name+'\'')
+  task = cur.fetchone()
+  return render_template("single_task.html", entry = task)
   pass
 
 @app.route('/employee/<name>')
@@ -142,34 +143,34 @@ def view_employee(name):
   db = get_db()
   cur = db.execute('select name, position from employees where name = \''+name+'\'')
   employee = cur.fetchone()
-  return render_template("single_view.html", entry = employee)
+  return render_template("single_employee.html", entry = employee)
   pass
 
 @app.route('/report/<name>')
 def view_report(name):
   """ USer story: user should be able to view and alter separate tasks """
   db = get_db()
-  cur = db.execute('select report_name, creator, content from reports where name = \''+name+'\'')
-  report = cur.fetcone()
-  return render_template("single_view.html", entry = report)
+  cur = db.execute('select report_name, creator, content from reports where report_name = \''+name+'\'')
+  report = cur.fetchone()
+  return render_template("single_report.html", entry = report)
   pass
 
 @app.route('/event/<name>')
 def view_event(name):
   """ USer story: user should be able to view and alter separate tasks """
   db = get_db()
-  cur = db.execute('select event_name, event_date, client_name from events where name = \''+name+'\'')
-  event = cur.fetcone()
-  return render_template("single_view.html", entry = event)
+  cur = db.execute('select event_name, event_date, client_name from events where event_name = \''+name+'\'')
+  event = cur.fetchone()
+  return render_template("single_event.html", entry = event)
   pass
 
 @app.route('/client/<name>')
 def view_client(name):
   """ USer story: user should be able to view and alter separate tasks """
   db = get_db()
-  cur = db.execute('select client_name, client_status, number_of_events from clients where name = \''+name+'\'')
-  client = cur.fetcone()
-  return render_template("single_view.html", entry = client)
+  cur = db.execute('select client_name, client_status, number_of_events from clients where client_name = \''+name+'\'')
+  client = cur.fetchone()
+  return render_template("single_client.html", entry = client)
   pass
 
 
@@ -180,7 +181,7 @@ def remove_report(name):
   db = get_db()
   cur = db.execute('delete from reports where report_name = \''+name+'\'')
   db.commit()
-  flash("Report removed!")
+  flash("Report '"+name+"' removed!")
   return redirect(url_for('view_reports'))
 
 @app.route('/delete_event/<name>', methods=['POST'])
@@ -188,34 +189,35 @@ def remove_event(name):
   db = get_db()
   cur = db.execute('delete from events where event_name = \''+name+'\'')
   db.commit()
-  flash("Event removed!")
+  flash("Event '"+name+"' removed!")
   return redirect(url_for('list_events'))
 
 @app.route('/delete_task/<name>', methods=['POST'])
 def remove_task(name):
   db = get_db()
-  cur = db.execute('delete from reports where report_name = \''+name+'\'')
+  cur = db.execute('delete from tasks where task_name = \''+name+'\'')
   db.commit()
-  flash("Task removed!")
+  flash("Task '"+name+"' removed!")
   return redirect(url_for('view_tasks'))
 
 @app.route('/delete_employee/<name>', methods=['POST'])
 def remove_employee(name):
   db = get_db()
-  cur = db.execute('delete from reports where report_name = \''+name+'\'')
+  cur = db.execute('delete from employees where name = \''+name+'\'')
   db.commit()
-  flash("Employee removed!")
+  flash("Employee '"+name+"' removed!")
   return redirect(url_for('view_employees'))
 
 
 @app.route('/delete_client/<name>', methods=['POST'])
 def remove_client(name):
   db = get_db()
-  cur = db.execute('delete from reports where report_name = \''+name+'\'')
+  cur = db.execute('delete from clients where client_name = \''+name+'\'')
   db.commit()
-  flash("Client removed!")
+  flash("Client '"+name+"' removed!")
   return redirect(url_for('view_clients'))
 
+### ADD FUNCTIONS ###
 
 @app.route('/add_employee', methods=['POST'])
 def create_employee():
@@ -224,9 +226,11 @@ def create_employee():
   #Parse event info input
   #Insert new employee to table 'employees'
   db = get_db()
-  cur = db.execute('insert into employees name, position')
+  name = request.form['name']
+  position = request.form['position']
+  cur = db.execute('insert into employees (name,position) values (?,?)', [name, position])
   db.commit()
-  flash("Employee Added!")
+  flash("Employee '"+name+"' Added!")
   return redirect(url_for('view_employees'))
 
 @app.route('/add_event', methods=['POST'])
@@ -235,7 +239,15 @@ def create_event():
 
   #Parse event info input
   #Insert new event in to table 'events'
-  pass
+  db = get_db()
+  name = request.form['event_name']
+  date = request.form['event_date']
+  client_name = request.form['client_name']
+  budget = request.form['budget']
+  cur = db.execute('insert into events (event_name,event_date,client_name,budget) values (?,?,?,?)', [name, date, client_name, budget])
+  db.commit()
+  flash("Event '"+name+"'' Added!")
+  return redirect(url_for('list_events'))
 
 @app.route('/add_report', methods=['POST'])
 def create_report():
@@ -246,19 +258,34 @@ def create_report():
   content = request.form['content']
   cur = db.execute('insert into reports (report_name,creator,content) values (?,?,?)', [name, creator, content])
   db.commit()
-  flash("Report Added!")
+  flash("Report '"+name+"' Added!")
   return redirect(url_for('view_reports'))
-  pass
 
 @app.route('/add_task', methods=['POST'])
 def create_task():
   """ User story: Service/Production manager can add tasks"""
-  pass
+  db = get_db()
+  task_name = request.form['task_name']
+  client_name = request.form['client_name']
+  date = request.form['task_date']
+  budget = request.form['budget']
+  sub_team = request.form['sub_team']
+  cur = db.execute('insert into tasks (client_name,task_date,task_name,budget,sub_team) values (?,?,?,?,?)', [client_name,date,task_name,budget,sub_team])
+  db.commit()
+  flash("Task '"+task_name+"' Added!")
+  return redirect(url_for('view_tasks'))
 
 @app.route('/add_client', methods=['POST'])
 def create_client():
   """ User story: Service/Production manager can add tasks"""
-  pass
+  db = get_db()
+  name = request.form['client_name']
+  status = request.form['client_status']
+  events = request.form['number_of_events']
+  cur = db.execute('insert into clients (client_name,client_status,number_of_events) values (?,?,?)', [name, status, events])
+  db.commit()
+  flash("Client '"+name+"' Added!")
+  return redirect(url_for('view_clients'))
 
 
 if __name__ == "__main__":

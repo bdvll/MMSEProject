@@ -1,0 +1,6 @@
+{% extends "base_layout.html" %}
+{% block body %}
+<h2> {{entry.client_name}} </h2>
+<p> Status: {{ entry.client_status}}
+<p> Earlier events with us: {{entry.number_of_events}}
+{% endblock %}
