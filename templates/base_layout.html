@@ -5,13 +5,13 @@
   <div class="header">
     <h1>SEP</h1>
   </div>
-  <div class="metanav">
-  {% if session.logged_in %}
-    <a href="{{ url_for('logout') }}">log out</a>
-  {% endif %}
-  </div>
   {% for message in get_flashed_messages() %}
     <div class="flash">{{ message }}</div>
   {% endfor %}
+  <div class="metanav">
+  {% if session.logged_in %}
+    <a href="{{ url_for('logout') }}"><button type="button">Log out</button></a>
+  {% endif %}
+  </div>
   {% block body %}{% endblock %}
 </div>

@@ -1,9 +1,11 @@
 {% extends "base_layout.html" %}
 {% block body %}
-<h2> Root of application </h2>
+<h2> Welcome to SEP! </h2>
 <p> Links to different functions of the system based on user roll </p>
+<p> Role: {{ role }}
+<ul class="sep_list">
 {% for right in access_rights %}
-  <li><h2>{{ right }}</h2>{{ right }}</li>
+  <li><h2>{{ right }}</h2> <a href={{ right }}><button type="button">{{ right }}</button></a></li>
 {% else %}
   <li><em>Unbelievable.  No entries here so far</em></li>
 {% endfor %}

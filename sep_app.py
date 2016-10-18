@@ -53,7 +53,7 @@ def login():
       session['logged_in'] = True
       session['username'] = username
       flash('Welcome, '+username)
-      return render_template("root.html")
+      return redirect(url_for('root'))
   return render_template('login.html', error=error)
 
 @app.route('/logout')
@@ -67,8 +67,10 @@ def root():
   if not session.get('logged_in'):
     return redirect(url_for('login'))
 
+
+  username = session.get('username')
   access_rights = Roles[USERS[username]]
-  return render_template("root.html", access_rights=access_rights)
+  return render_template("root.html", access_rights=access_rights, role = USERS[username])
 
 
 
@@ -81,21 +83,30 @@ def view_employees():
   #Get all entries in tale 'employees'
   #Return view with all the employees
   #return render_template("list_entries.html", employees=employees)
+  employees = ""
+  return render_template("list_entries.html", entries = employees, list_object ="Employees")
   pass
 
 @app.route('/tasks')
 def view_tasks():
   """ User Story: Service/Product dept. can view tasks"""
+  tasks = ""
+  return render_template("list_entries.html", entries = tasks, list_object ="Tasks")
+
   pass
 
-@app.route('/task')
-def view_task():
-  """ USer story: user should be able to view and alter separate tasks """
+@app.route('/reports')
+def view_reports():
+  """ User Story: HR/Marketing can view reports"""
+  reports = ""
+  return render_template("list_entries.html", entries = reports, list_object ="Reports")
   pass
 
 @app.route('/clients')
 def view_clients():
   """User Story: User can view clients """
+  clients = ""
+  return render_template("list_entries.html", entries = clients, list_object ="Clients")
   pass
 
 @app.route('/events')
@@ -104,8 +115,35 @@ def list_events():
 
   #Get all entries in table 'events'
   #Return view with all the events
-
+  events = ""
+  return render_template("list_entries.html", entries = events, list_object ="Events")
   pass
+
+@app.route('/task')
+def view_task():
+  """ USer story: user should be able to view and alter separate tasks """
+  pass
+
+@app.route('/employee')
+def view_employee():
+  """ USer story: user should be able to view and alter separate tasks """
+  pass
+
+@app.route('/report')
+def view_report():
+  """ USer story: user should be able to view and alter separate tasks """
+  pass
+
+@app.route('/event')
+def view_event():
+  """ USer story: user should be able to view and alter separate tasks """
+  pass
+
+@app.route('/client')
+def view_client():
+  """ USer story: user should be able to view and alter separate tasks """
+  pass
+
 
 
 ### POST ENDPOINTS ###
@@ -143,7 +181,7 @@ def create_task():
 if __name__ == "__main__":
   app.run()
   init_db()
-  
+
 
 class Employee:
   def __init__(self, name, position):

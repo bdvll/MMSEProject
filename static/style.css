@@ -11,10 +11,22 @@ body {background: #fafafa;}
 
 /* LIST */
 .sep_list        { list-style: none; margin: 0; padding: 0; }
-.sep_list li     { margin: 0.8em 1.2em; }
-.sep_list li h2  { margin-left: -1em; }
+.sep_list li     { margin: 1em; background: #eee; border: 2px solid #aaa; }
+.sep_list li h2  { margin-left: 0.1em;border-bottom: 2px solid #eee; }
 
 /* LOGIN */
 .login {text-align: center; font-size: 1.2em;}
 .login h2 {margin-top: 1em;}
 input[type="submit"]#login {text-align: center;}
+
+.button {
+  font: bold 11px Arial;
+  text-decoration: none;
+  background-color: #EEEEEE;
+  color: #333333;
+  padding: 2px 6px 2px 6px;
+  border-top: 1px solid #CCCCCC;
+  border-right: 1px solid #333333;
+  border-bottom: 1px solid #333333;
+  border-left: 1px solid #CCCCCC;
+}
