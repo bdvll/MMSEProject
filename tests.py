@@ -42,7 +42,7 @@ class FlaskrTestCase(unittest.TestCase):
     rv = self.login('admin', 'wrong_password')
     #print rv.data
     assert 'Incorrect login' in rv.data
-    print "Test Login and logout - OK"
+    print "\n Test Login and logout - OK"
 
   def test_create_remove_report(self):
     rv = self.add_report("name", "creator", "content")
@@ -51,7 +51,7 @@ class FlaskrTestCase(unittest.TestCase):
     rv = self.remove_report("name")
     #print rv.data
     assert 'removed!' in rv.data
-    print "Test of add / remove report - OK"
+    print "\n Test of add / remove report - OK"
 
   def test_access_roles(self):
     rv = self.login(name='admin', word='default')
@@ -70,7 +70,7 @@ class FlaskrTestCase(unittest.TestCase):
     assert 'reports' in rv.data
     assert not 'clients' in rv.data
     
-    print "Test of system access rights  - OK"
+    print "\n Test of system access rights  - OK"
 
 if __name__ == '__main__':
   unittest.main()
