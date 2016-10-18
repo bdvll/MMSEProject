@@ -23,22 +23,38 @@ class FlaskrTestCase(unittest.TestCase):
   def logout(self):
     return self.app.get('/logout', follow_redirects=True)
 
+  def add_report(self, name, creator, content):
+    return self.app.post('/add_report', data=dict(report_name=name, creator=creator, content=content), follow_redirects=True)
+
+  def remove_report(self, name):
+    return self.app.post('/delete_report/name', data=dict(name=name), follow_redirects=True)
+
   def test_login_logout(self):
     rv = self.login(name='admin', word='default')
     #print rv.data
     assert 'Welcome,' in rv.data
-
     rv = self.logout()
     #print rv.data
     assert 'You were logged out' in rv.data
-    
     rv = self.login('aadmin', 'default')
     #print rv.data
     assert 'Incorrect login' in rv.data
-
     rv = self.login('admin', 'wrong_password')
     #print rv.data
     assert 'Incorrect login' in rv.data
+
+  def test_create_remove_report(self):
+    rv = self.add_report("name", "creator", "content")
+    #print rv.data
+    assert 'Report Added!' in rv.data
+    rv = self.remove_report("name")
+    #print rv.data
+    assert 'Report removed!' in rv.data
+
+def test_access_roles():
+    rv = self.login(name='admin', word='default')
+    #print rv.data
+    assert 'Welcome,' in rv.data
 
 if __name__ == '__main__':
   unittest.main()
