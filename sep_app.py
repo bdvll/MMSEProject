@@ -5,10 +5,14 @@ from flask import Flask, request, session, g, redirect, url_for, abort, \
      render_template, flash
 
 ### INIT ###
+Roles = {"admin": ["employees", "events", "tasks", "reports", "clients"],
+        "marketing": ["events", "reports"],
+        "HR": ["employees"],
+        "scs": ["clients", "events"] }
 
 app = Flask(__name__)
 #Dicts mapping roles to user names
-USERS = {"admin"}
+USERS = {"admin": "admin", "josh": "marketing", "mike": "HR", "Hannah": "scs"}
 
 app.config.update(dict(
     DATABASE=os.path.join(app.root_path, 'sep.db'),
@@ -62,7 +66,9 @@ def logout():
 def root():
   if not session.get('logged_in'):
     return redirect(url_for('login'))
-  return render_template("root.html")
+
+  access_rights = Roles[USERS[username]]
+  return render_template("root.html", access_rights=access_rights)
 
 
 
@@ -74,7 +80,7 @@ def view_employees():
 
   #Get all entries in tale 'employees'
   #Return view with all the employees
-
+  #return render_template("list_entries.html", employees=employees)
   pass
 
 @app.route('/tasks')
@@ -134,6 +140,10 @@ def create_task():
   pass
 
 
+if __name__ == "__main__":
+  app.run()
+  init_db()
+  
 
 class Employee:
   def __init__(self, name, position):

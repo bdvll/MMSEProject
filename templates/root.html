@@ -2,4 +2,10 @@
 {% block body %}
 <h2> Root of application </h2>
 <p> Links to different functions of the system based on user roll </p>
+{% for right in access_rights %}
+  <li><h2>{{ right }}</h2>{{ right }}</li>
+{% else %}
+  <li><em>Unbelievable.  No entries here so far</em></li>
+{% endfor %}
+</ul>
 {% endblock %}
