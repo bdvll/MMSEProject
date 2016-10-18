@@ -2,4 +2,11 @@
 {% block body %}
 <h2> Root of application </h2>
 <p> Links to different functions of the system based on user roll </p>
+<ul>
+{% for a in access %}
+  <li> {{a}} </li>
+{% else %}
+  <li><em> Unbelievable, No entries here </em></li>
+{% endfor %}
+</ul>
 {% endblock %}

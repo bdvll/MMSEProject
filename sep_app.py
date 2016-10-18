@@ -7,6 +7,7 @@ from flask import Flask, request, session, g, redirect, url_for, abort, \
 ### INIT ###
 
 app = Flask(__name__)
+ROLES = {"admin" : ["employee", "scs"]}
 #Dicts mapping roles to user names
 USERS = {"admin"}
 
@@ -49,7 +50,7 @@ def login():
       session['logged_in'] = True
       session['username'] = username
       flash('Welcome, '+username)
-      return render_template("root.html")
+      return render_template("root.html", access=ROLES[username])
   return render_template('login.html', error=error)
 
 @app.route('/logout')
@@ -71,7 +72,10 @@ def root():
 @app.route('/employees') 
 def view_employees():
   """ User Story: User should be able to list employees"""
-
+  db = get_db()
+  cur = db.execute('select * from employees')
+  Emp = cur.fetchall()
+  return render_template("list_entries.html", employees = Emp, addAction='/add_employee')
   #Get all entries in tale 'employees'
   #Return view with all the employees
 
@@ -107,7 +111,19 @@ def list_events():
 @app.route('/add_employee', methods=['POST'])
 def add_employee():
   """ User Story: HR should be able to add employees """
+  error = None
+  if request.method == 'POST':
+    username = request.form['name']
+    password = request.form['password']
+    position = request.form['position']
 
+  db = get_db();
+  db.execute('insert into employee (name, password, position) values (?, ?, ?)',[username, password, position])
+  db.commit()
+  flash("new employee added")
+
+    
+  redirect(url_for('employee'))
   #Parse event info input
   #Insert new employee to table 'employees'
 

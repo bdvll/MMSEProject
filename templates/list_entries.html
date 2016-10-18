@@ -1,1 +1,22 @@
-<p> for listing employees, events, tasks and reports </p>
+{% extends "base_layout.html" %}
+{% block body %}
+<h2> List of stuff </h2>
+<p> Links to different functions of the system based on user roll </p>
+<div class="action_box">
+      <form action={{addAction}} method=post>
+        <dl>
+          <input type="text" id="name" name="name" placeholder="Username" onFocus="this.value=''">
+          <input type="text" id="pass" name="pass" placeholder="Password" onFocus="this.value=''">
+          <input type="text" id="position" name="pass" placeholder="Password" onFocus="this.value=''">
+          <input type="submit" id="login" value="Login">
+        </dl>
+      </form>
+    </div>
+<ul>
+{% for e in employees %}
+  <li> {{e}} </li>
+{% else %}
+  <li><em> Unbelievable, No entries here </em></li>
+{% endfor %}
+</ul>
+{% endblock %}
