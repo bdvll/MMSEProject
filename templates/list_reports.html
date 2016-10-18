@@ -5,11 +5,11 @@
     <form action="{{ url_for('create_report') }}" method="post" class="add-entry">
       <dl>
         <dt>Name:
-        <dd><input type="text" size="30" name="report_name">
+        <dd><input type="text" size="30" name="report_name" id="report_name">
         <dt>Author:
-        <dd><input type="text" size="30" name="creator">
+        <dd><input type="text" size="30" name="creator" id="creator">
         <dt>Content:
-        <dd><textarea name="text" rows="5" cols="40"></textarea>
+        <dd><textarea name="content" id="content" rows="5" cols="40"></textarea>
         <dd><input type="submit" value="Add Report">
       </dl>
     </form>
@@ -19,6 +19,9 @@
     <li>
       <h2><a href="report/{{ entry.report_name }}">{{ entry.report_name }}</h2>
     creator: {{ entry.creator|safe }}
+    <form action="delete_report/{{entry.report_name}}" method="post" class="add-entry">
+      <input type="submit" value="Delete">
+    </form>
     </li>
   {% else %}
     <li><em>Unbelievable.  No entries here so far</em></li>

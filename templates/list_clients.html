@@ -19,6 +19,9 @@
     <li>
       <h2><a href="client/{{ entry.client_name }}">{{ entry.client_name }}</h2>
     status: {{ entry.client_status|safe }} events: {{ entry.number_of_events}}
+    <form action="delete_client/{{entry.client_name}}" method="post" class="add-entry">
+      <input type="submit" value="Delete">
+    </form>
     </li>
   {% else %}
     <li><em>Unbelievable.  No entries here so far</em></li>

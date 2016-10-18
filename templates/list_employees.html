@@ -17,6 +17,9 @@
     <li>
       <h2><a href="employee/{{ entry.name }}">{{ entry.name }}</h2>
     {{ entry.position|safe }}
+    <form action="delete_employee/{{entry.name}}" method="post" class="add-entry">
+      <input type="submit" value="Delete">
+    </form>
     </li>
   {% else %}
     <li><em>Unbelievable.  No entries here so far</em></li>

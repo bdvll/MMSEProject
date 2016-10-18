@@ -21,6 +21,9 @@
     <li>
       <h2><a href="event/{{ entry.event_name }}">{{ entry.event_name }}</h2>
     client: {{ entry.client_name|safe }} date: {{ entry.event_date}}
+    <form action="delete_event/{{entry.event_name}}" method="post" class="add-entry">
+      <input type="submit" value="Delete">
+    </form>
     </li>
   {% else %}
     <li><em>Unbelievable.  No entries here so far</em></li>
