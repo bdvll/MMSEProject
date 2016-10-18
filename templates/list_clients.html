@@ -1,0 +1,27 @@
+{% extends "base_layout.html" %}
+{% block body %}
+<h2> {{ list_object }}</h2>
+{% if session.logged_in %}
+    <form action="{{ url_for('create_client') }}" method="post" class="add-entry">
+      <dl>
+        <dt>Name:
+        <dd><input type="text" size="30" name="client_name">
+        <dt>Status:
+        <dd><input type="text" name="client_status" size="30">
+        <dt>Number of events:
+        <dd><input type="text" name="number_of_events" size="30">
+        <dd><input type="submit" value="Add Client">
+      </dl>
+    </form>
+  {% endif %}
+  <ul class="sep_list">
+  {% for entry in entries %}
+    <li>
+      <h2><a href="client/{{ entry.client_name }}">{{ entry.client_name }}</h2>
+    status: {{ entry.client_status|safe }} events: {{ entry.number_of_events}}
+    </li>
+  {% else %}
+    <li><em>Unbelievable.  No entries here so far</em></li>
+  {% endfor %}
+  </ul>
+{% endblock %}

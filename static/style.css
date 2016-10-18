@@ -3,6 +3,12 @@ h1 {font-size: 60px;  opacity: 0.87; }
 h2 {font-size: 40px;  opacity: 0.54; }
 p {font-size: 20px;  opacity: 0.54; }
 
+a:hover, a:visited, a:link, a:active
+{
+    text-decoration: none;
+    color: inherit;
+}
+
 body {background: #fafafa;}
 .header {width: 75em; height: 10em; border-bottom: 2px solid #ccc; display: flex; text-align: center; align-items: center;}
 .sep_page{ margin: 2em auto; width: 75em; border: 5px solid #ccc; padding: 0.8em; background: #fff; }
@@ -11,20 +17,21 @@ body {background: #fafafa;}
 
 /* LIST */
 .sep_list        { list-style: none; margin: 0; padding: 0; }
-.sep_list li     { margin: 1em; background: #eee; border: 2px solid #aaa; }
-.sep_list li h2  { margin-left: 0.1em;border-bottom: 2px solid #eee; }
+.sep_list li     { margin: 0.5em; background: #efefef; border: 2px solid #aaa; }
+.sep_list a      { margin-bottom: 1.5em; margin-left: 0.25em; }
+.sep_list li h2  { margin-left: 0.1em;border-bottom: 2px solid #999; }
 
 /* LOGIN */
 .login {text-align: center; font-size: 1.2em;}
 .login h2 {margin-top: 1em;}
 input[type="submit"]#login {text-align: center;}
 
-.button {
+button {
   font: bold 11px Arial;
   text-decoration: none;
   background-color: #EEEEEE;
   color: #333333;
-  padding: 2px 6px 2px 6px;
+  padding: 10px 5px 10px 5px;
   border-top: 1px solid #CCCCCC;
   border-right: 1px solid #333333;
   border-bottom: 1px solid #333333;

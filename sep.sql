@@ -18,11 +18,20 @@ create table tasks (
   client_name text not null,
   task_date text not null,
   task_name text not null,
-  budget integer not null
+  budget integer not null,
+  sub_team text not null
 );
 drop table if exists reports;
 create table reports (
   id integer primary key autoincrement,
+  report_name text not null,
   creator text not null,
   content text not null
 );
+drop table if exists clients;
+create table clients (
+  id integer primary key autoincrement,
+  client_name text not null,
+  client_status text not null,
+  number_of_events integer not null
+)

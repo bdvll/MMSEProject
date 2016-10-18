@@ -2,7 +2,7 @@
 {% block body %}
 <h2> {{ list_object }}</h2>
 {% if session.logged_in %}
-    <form action="{{ url_for('create_employee') }}" method="post" class="add-entry">
+    <form action="{{ url_for('create_task') }}" method="post" class="add-entry">
       <dl>
         <dt>Title:
         <dd><input type="text" size="30" name="title">
@@ -15,8 +15,8 @@
   <ul class="sep_list">
   {% for entry in entries %}
     <li>
-      <h2><a href="employee/{{ entry.name }}">{{ entry.name }}</h2>
-    {{ entry.position|safe }}
+      <h2><a href="task/{{ entry.task_name }}">{{ entry.task_name }}</h2>
+    client: {{ entry.client_name|safe }} date: {{entry.task_date}}
     </li>
   {% else %}
     <li><em>Unbelievable.  No entries here so far</em></li>

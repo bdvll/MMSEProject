@@ -1,0 +1,27 @@
+{% extends "base_layout.html" %}
+{% block body %}
+<h2> {{ list_object }}</h2>
+{% if session.logged_in %}
+    <form action="{{ url_for('create_report') }}" method="post" class="add-entry">
+      <dl>
+        <dt>Name:
+        <dd><input type="text" size="30" name="report_name">
+        <dt>Author:
+        <dd><input type="text" size="30" name="creator">
+        <dt>Content:
+        <dd><textarea name="text" rows="5" cols="40"></textarea>
+        <dd><input type="submit" value="Add Report">
+      </dl>
+    </form>
+  {% endif %}
+  <ul class="sep_list">
+  {% for entry in entries %}
+    <li>
+      <h2><a href="report/{{ entry.report_name }}">{{ entry.report_name }}</h2>
+    creator: {{ entry.creator|safe }}
+    </li>
+  {% else %}
+    <li><em>Unbelievable.  No entries here so far</em></li>
+  {% endfor %}
+  </ul>
+{% endblock %}

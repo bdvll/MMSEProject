@@ -24,7 +24,6 @@ app.config.update(dict(
 app.config.from_envvar('SEP_SETTINGS', silent=True)
 
 ### DATABASE SET UP ###
-@app.before_first_request
 def init_db():
   db = get_db()
   with app.open_resource('sep.sql', mode='r') as schema:
@@ -70,7 +69,7 @@ def root():
 
   username = session.get('username')
   access_rights = Roles[USERS[username]]
-  return render_template("root.html", access_rights=access_rights, role = USERS[username])
+  return render_template("root.html", access_rights=access_rights, role = USERS[username], username = username)
 
 
 
@@ -83,30 +82,37 @@ def view_employees():
   #Get all entries in tale 'employees'
   #Return view with all the employees
   #return render_template("list_entries.html", employees=employees)
-  employees = ""
-  return render_template("list_entries.html", entries = employees, list_object ="Employees")
+  db = get_db()
+  cur = db.execute('select name, position from employees order by id desc')
+  employees = cur.fetchall()
+  return render_template("list_employees.html", entries = employees, list_object ="Employees")
   pass
 
 @app.route('/tasks')
 def view_tasks():
   """ User Story: Service/Product dept. can view tasks"""
-  tasks = ""
-  return render_template("list_entries.html", entries = tasks, list_object ="Tasks")
+  db = get_db()
+  cur = db.execute('select client_name, task_date, task_name, budget from tasks order by id desc')
+  tasks = cur.fetchall()
+  return render_template("list_tasks.html", entries = tasks, list_object ="Tasks")
 
   pass
 
 @app.route('/reports')
 def view_reports():
   """ User Story: HR/Marketing can view reports"""
-  reports = ""
-  return render_template("list_entries.html", entries = reports, list_object ="Reports")
-  pass
+  db = get_db()
+  cur = db.execute('select report_name, creator from reports order by id desc')
+  reports = cur.fetchall()
+  return render_template("list_reports.html", entries = reports, list_object ="Reports")
 
 @app.route('/clients')
 def view_clients():
   """User Story: User can view clients """
-  clients = ""
-  return render_template("list_entries.html", entries = clients, list_object ="Clients")
+  db = get_db()
+  cur = db.execute('select client_name, client_status, number_of_events from clients order by id desc')
+  clients = cur.fetchall()
+  return render_template("list_clients.html", entries = clients, list_object ="Clients")
   pass
 
 @app.route('/events')
@@ -115,33 +121,55 @@ def list_events():
 
   #Get all entries in table 'events'
   #Return view with all the events
-  events = ""
-  return render_template("list_entries.html", entries = events, list_object ="Events")
+  db = get_db()
+  cur = db.execute('select event_name, event_date, client_name, budget from events order by id desc')
+  events = cur.fetchall()
+  return render_template("list_events.html", entries = events, list_object ="Events")
   pass
 
-@app.route('/task')
-def view_task():
+@app.route('/task/<name>')
+def view_task(name):
   """ USer story: user should be able to view and alter separate tasks """
+  db = get_db()
+  cur = db.execute('select client_name, task_date, task_name, budget, sub_team from tasks where name = \''+name+'\'')
+  task = cur.fetcone()
+  return render_template("single_view.html", entry = task)
   pass
 
-@app.route('/employee')
-def view_employee():
+@app.route('/employee/<name>')
+def view_employee(name):
   """ USer story: user should be able to view and alter separate tasks """
+  db = get_db()
+  cur = db.execute('select name, position from employees where name = \''+name+'\'')
+  employee = cur.fetchone()
+  return render_template("single_view.html", entry = employee)
   pass
 
-@app.route('/report')
-def view_report():
+@app.route('/report/<name>')
+def view_report(name):
   """ USer story: user should be able to view and alter separate tasks """
+  db = get_db()
+  cur = db.execute('select report_name, creator, content from reports where name = \''+name+'\'')
+  report = cur.fetcone()
+  return render_template("single_view.html", entry = report)
   pass
 
-@app.route('/event')
-def view_event():
+@app.route('/event/<name>')
+def view_event(name):
   """ USer story: user should be able to view and alter separate tasks """
+  db = get_db()
+  cur = db.execute('select event_name, event_date, client_name from events where name = \''+name+'\'')
+  event = cur.fetcone()
+  return render_template("single_view.html", entry = event)
   pass
 
-@app.route('/client')
-def view_client():
+@app.route('/client/<name>')
+def view_client(name):
   """ USer story: user should be able to view and alter separate tasks """
+  db = get_db()
+  cur = db.execute('select client_name, client_status, number_of_events from clients where name = \''+name+'\'')
+  client = cur.fetcone()
+  return render_template("single_view.html", entry = client)
   pass
 
 
@@ -149,12 +177,13 @@ def view_client():
 ### POST ENDPOINTS ###
 
 @app.route('/add_employee', methods=['POST'])
-def add_employee():
+def create_employee():
   """ User Story: HR should be able to add employees """
 
   #Parse event info input
   #Insert new employee to table 'employees'
-
+  db = get_db()
+  cur = db.execute('insert into employees name, position from employees order by id desc')
   pass
 
 @app.route('/add_event', methods=['POST'])
@@ -163,17 +192,21 @@ def create_event():
 
   #Parse event info input
   #Insert new event in to table 'events'
-
   pass
 
 @app.route('/add_report', methods=['POST'])
-def make_report():
+def create_report():
   """ User Story: User can create a report"""
 
   pass
 
 @app.route('/add_task', methods=['POST'])
 def create_task():
+  """ User story: Service/Production manager can add tasks"""
+  pass
+
+@app.route('/add_client', methods=['POST'])
+def create_client():
   """ User story: Service/Production manager can add tasks"""
   pass
 

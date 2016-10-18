@@ -3,7 +3,7 @@
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
 <div class="sep_page">
   <div class="header">
-    <h1>SEP</h1>
+    <h1><a href="{{url_for('root')}}">SEP</a></h1>
   </div>
   {% for message in get_flashed_messages() %}
     <div class="flash">{{ message }}</div>
