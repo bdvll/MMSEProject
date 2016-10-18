@@ -46,10 +46,10 @@ class FlaskrTestCase(unittest.TestCase):
   def test_create_remove_report(self):
     rv = self.add_report("name", "creator", "content")
     #print rv.data
-    assert 'Report Added!' in rv.data
+    assert 'Added!' in rv.data
     rv = self.remove_report("name")
     #print rv.data
-    assert 'Report removed!' in rv.data
+    assert 'removed!' in rv.data
 
   def test_access_roles(self):
     rv = self.login(name='admin', word='default')
@@ -60,7 +60,7 @@ class FlaskrTestCase(unittest.TestCase):
     assert 'reports' in rv.data
     assert 'clients' in rv.data
 
-    rv = self.login(name='josh', word='default')
+    rv = self.login(name='josh', word='kitten')
     #print rv.data
     assert not 'employees' in rv.data
     assert 'events' in rv.data
