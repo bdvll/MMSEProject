@@ -34,4 +34,10 @@ create table clients (
   client_name text not null,
   client_status text not null,
   number_of_events integer not null
+);
+drop table if exists requests;
+create table requests (
+  id integer primary key autoincrement,
+  position text not null,
+  amount integer  not null
 )

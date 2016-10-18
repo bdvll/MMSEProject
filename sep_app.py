@@ -5,9 +5,9 @@ from flask import Flask, request, session, g, redirect, url_for, abort, \
      render_template, flash
 
 ### INIT ###
-Roles = {"admin": ["employees", "events", "tasks", "reports", "clients"],
+Roles = {"admin": ["employees", "events", "tasks", "reports", "clients","requests"],
         "marketing": ["events", "reports"],
-        "HR": ["employees"],
+        "HR": ["employees","requests"],
         "scs": ["clients", "events"] }
 
 app = Flask(__name__)
@@ -97,7 +97,14 @@ def view_tasks():
   tasks = cur.fetchall()
   return render_template("list_tasks.html", entries = tasks, list_object ="Tasks")
 
-  pass
+@app.route('/requests')
+def view_requests():
+  """ User Story: Service/Product dept. can view tasks"""
+  db = get_db()
+  cur = db.execute('select position, amount from requests order by id desc')
+  requests = cur.fetchall()
+  return render_template("list_requests.html", entries = requests, list_object ="Requests")
+
 
 @app.route('/reports')
 def view_reports():
@@ -136,6 +143,14 @@ def view_task(name):
   task = cur.fetchone()
   return render_template("single_task.html", entry = task)
   pass
+
+@app.route('/request/<name>')
+def view_request(name):
+  """ USer story: user should be able to view and alter separate tasks """
+  db = get_db()
+  cur = db.execute('select position, amount, hire_type from requests where position = \''+name+'\'')
+  task = cur.fetchone()
+  return render_template("single_request.html", entry = task)
 
 @app.route('/employee/<name>')
 def view_employee(name):
@@ -199,6 +214,14 @@ def remove_task(name):
   db.commit()
   flash("Task '"+name+"' removed!")
   return redirect(url_for('view_tasks'))
+
+@app.route('/delete_request/<name>', methods=['POST'])
+def remove_request(name):
+  db = get_db()
+  cur = db.execute('delete from requests where position = \''+name+'\'')
+  db.commit()
+  flash("Request for '"+name+"' removed!")
+  return redirect(url_for('view_requests'))
 
 @app.route('/delete_employee/<name>', methods=['POST'])
 def remove_employee(name):
@@ -274,6 +297,18 @@ def create_task():
   db.commit()
   flash("Task '"+task_name+"' Added!")
   return redirect(url_for('view_tasks'))
+
+@app.route('/add_request', methods=['POST'])
+def create_request():
+  """ User story: Service/Production manager can add tasks"""
+  db = get_db()
+  position = request.form['position']
+  amount = request.form['amount']
+  hire_type = request.form['hire_type']
+  cur = db.execute('insert into requests (position,amount,hire_type) values (?,?,?)', [position,amount,hire_type])
+  db.commit()
+  flash("Request for '"+position+"' Added!")
+  return redirect(url_for('view_requests'))
 
 @app.route('/add_client', methods=['POST'])
 def create_client():

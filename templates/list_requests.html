@@ -1,0 +1,30 @@
+{% extends "base_layout.html" %}
+{% block body %}
+<h2> {{ list_object }}</h2>
+{% if session.logged_in %}
+    <form action="{{ url_for('create_request') }}" method="post" class="add-entry">
+      <dl>
+        <dt>Position:
+        <dd><input type="text" size="30" name="position">
+        <dt>Amount to hire:
+        <dd><input type="text" size="30" name="amount">
+        <dt>Preferred type of hire:
+        <dd><input type="text" size="30" name="hire_type">
+        <dd><input type="submit" value="Share">
+      </dl>
+    </form>
+  {% endif %}
+  <ul class="sep_list">
+  {% for entry in entries %}
+    <li>
+      <h2><a href="request/{{ entry.position }}">{{ entry.position }}</h2>
+    Amount to hire: {{ entry.amount|safe }}
+    <form action="delete_request/{{entry.position}}" method="post" class="add-entry">
+      <input type="submit" value="Delete">
+    </form>
+    </li>
+  {% else %}
+    <li><em>Unbelievable.  No entries here so far</em></li>
+  {% endfor %}
+  </ul>
+{% endblock %}
